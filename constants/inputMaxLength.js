@@ -1,0 +1,8 @@
+export const DEFAULT_INPUT_MAX_LENGTH = 100;
+export const DETAIL_NAME_MAX_LENGTH = 50;
+export const VIN_NAME_MAX_LENGTH = 256;
+export const USER_NAME_MAX_LENGTH = 50;
+export const PASSWORD_MAX_LENGTH = 50;
+export const USER_MAIL_MAX_LENGTH = 50;
+export const ADDRESS_MAX_LENGTH = 256;
+export const TEXTAREA_COMMENT_MAX_LENGTH = 256;
