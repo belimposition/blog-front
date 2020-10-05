@@ -5,12 +5,16 @@ import styled from 'styled-components/macro';
 import Button from '@components/Button';
 import Input, { InputField } from '@components/Input';
 
-import { login } from '@store/user';
+import { createUser } from '@store/user';
 
-import { USER_MAIL_MAX_LENGTH, PASSWORD_MAX_LENGTH } from '@constants/inputMaxLength';
+import {
+  USER_NAME_MAX_LENGTH,
+  PASSWORD_MAX_LENGTH,
+  USER_MAIL_MAX_LENGTH,
+} from '@constants/inputMaxLength';
 
 
-const LoginPageWrapper = styled.div`
+const RegistrationPageContentWrapper = styled.div`
   padding-top: 40px;
   display: flex;
   flex-direction: column;
@@ -35,11 +39,9 @@ const StyledInput = styled(Input)`
   height: 56px;
   width: 453px;
   margin-right: 24px;
-
   ${InputField} {
     font-size: 17px;
     line-height: 24px;
-
     ::placeholder {
       font-size: 17px;
       color: #a0a0a0;
@@ -47,32 +49,47 @@ const StyledInput = styled(Input)`
   }
 `;
 
-const StyledLoginBtn = styled(Button)`
+const StyledRegisterBtn = styled(Button)`
   margin-left: 73px;
   width: 453px;
 `;
 
 
-const LoginPageContent = ({ className }) => {
+const RegistrationPageContent = ({ className }) => {
   const dispatch = useDispatch();
-  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const onLoginHandler = () => {
-    dispatch(login({
+  const createUserHandler = () => {
+    dispatch(createUser({
+      name,
       email,
       password,
     }));
-  };
+  }
 
   return (
-    <LoginPageWrapper className={className}>
+    <RegistrationPageContentWrapper className={className}>
+      <Row>
+        <Label htmlFor="signInLoginInput">Имя</Label>
+        <StyledInput
+          type="text"
+          name="name"
+          id="nameInput"
+          inputPlaceholder="Имя"
+          onChange={setName}
+          isWithoutFocus
+          maxLength={USER_NAME_MAX_LENGTH}
+        />
+      </Row>
+
       <Row>
         <Label htmlFor="signInLoginInput">Email</Label>
         <StyledInput
           type="text"
-          name="login"
-          id="signInLoginInput"
+          name="email"
+          id="emailInput"
           inputPlaceholder="email"
           onChange={setEmail}
           isWithoutFocus
@@ -83,7 +100,7 @@ const LoginPageContent = ({ className }) => {
       <Row>
         <Label htmlFor="signInPasswordInput">Пароль</Label>
         <StyledInput
-          id="signInPasswordInput"
+          id="passwordInput"
           name="password"
           type="password"
           autocomplete="on"
@@ -93,14 +110,14 @@ const LoginPageContent = ({ className }) => {
         />
       </Row>
 
-      <StyledLoginBtn
-        onClick={onLoginHandler}
+      <StyledRegisterBtn
         theme='yellow'
+        onClick={createUserHandler}
       >
-        Войти
-      </StyledLoginBtn>
-    </LoginPageWrapper>
+        Зарегистрироваться
+      </StyledRegisterBtn>
+    </RegistrationPageContentWrapper>
   );
-  }
+}
 
-export default LoginPageContent;
+export default RegistrationPageContent;

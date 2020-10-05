@@ -49,18 +49,15 @@ export function* createPostSaga({ payload }) {
   try {
     const response = yield call(
       axios.post,
-      '/post',
+      'api/posts/create',
       {
-        title: payload.title,
-        description: payload.description,
-        content: payload.content,
+        ...payload
       },
     );
 
-    yield put(createPostSuccess(response.data));
+    yield put(createPostSuccess(response.data.data));
     yield Router.push('/');
   } catch (error) {
-    console.log('error', error);
     yield put(createPostFailure());
   }
 }
@@ -74,12 +71,11 @@ export function* getPostsSaga() {
   try {
     const response = yield call(
       axios.get,
-      '/posts'
+      '/api/posts'
     );
 
-    yield put(getPostsSuccess(response.data));
+    yield put(getPostsSuccess(response.data.data));
   } catch (error) {
-    console.log('error', error);
     yield put(getPostsFailure());
   }
 }
@@ -92,10 +88,10 @@ export function* getPostByIdSaga(id) {
   try {
     const response = yield call(
       axios.get,
-      `/post/${id}`
+      `api/posts/${id}`
     );
 
-    yield put(getPostByIdSuccess(response.data));
+    yield put(getPostByIdSuccess(response.data.data));
   } catch (error) {
     console.log('error', error);
     yield put(getPostByIdFailure());
@@ -109,7 +105,7 @@ export function* deletePostByIdSaga({ payload }) {
   try {
     yield call(
       axios.delete,
-      `/post/${payload.id}`
+      `api/posts/${payload.id}`
     );
 
     yield put(deletePostByIdSuccess());
@@ -127,7 +123,7 @@ export function* updatePostByIdSaga({ payload }) {
   try {
     const response = yield call(
       axios.put,
-      `/post/${payload.id}`,
+      `api/posts/${payload.id}`,
       {
         title: payload.title,
         description: payload.description,
@@ -135,10 +131,9 @@ export function* updatePostByIdSaga({ payload }) {
       },
     );
 
-    yield put(updatePostByIdSuccess(response.data));
+    yield put(updatePostByIdSuccess(response.data.data));
     yield Router.push(`/post/${payload.id}`);
   } catch (error) {
-    console.log('error', error);
     yield put(updatePostByIdFailure());
   }
 }
@@ -150,17 +145,16 @@ export function* sendNewCommentSaga({ payload }) {
   try {
     const response = yield call(
       axios.put,
-      `/post/comment/${payload.postId}`,
+      `api/posts/comment/${payload.postId}`,
       {
         userName: payload.userName,
-        userId: payload.userId,
+        authorId: payload.authorId,
         message: payload.message,
       },
     );
 
-    yield put(sendNewCommentSuccess(response.data));
+    yield put(sendNewCommentSuccess(response.data.data));
   } catch (error) {
-    console.log('error', error);
     yield put(sendNewCommentFailure());
   }
 }
@@ -171,16 +165,16 @@ export function* deleteCommentByIdSaga({ payload }) {
   try {
     const response = yield call(
       axios.put,
-      `/post/comment/${payload.postId}/delete`,
+      `api/posts/comment/${payload.postId}/remove`,
       {
         commentId: payload.commentId,
+        authorId: payload.authorId,
       },
     );
 
   
-    yield put(deleteCommentByIdSuccess(response.data));
+    yield put(deleteCommentByIdSuccess(response.data.data));
   } catch (error) {
-    console.log('error', error);
     yield put(deleteCommentByIdFailure());
   }
 }
@@ -192,16 +186,16 @@ export function* changeCommentSaga({ payload }) {
   try {
     const response = yield call(
       axios.put,
-      `/post/comment/${payload.postId}/change`,
+      `api/posts/comment/${payload.postId}/change`,
       {
         comment: payload.comment,
+        authorId: payload.authorId,
       },
     );
 
-  
-    yield put(changeCommentSuccess(response.data));
+
+    yield put(changeCommentSuccess(response.data.data));
   } catch (error) {
-    console.log('error', error);
     yield put(changeCommentFailure());
   }
 }

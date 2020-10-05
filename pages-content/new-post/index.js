@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components/macro';
 import { Editor } from '@tinymce/tinymce-react'; 
 
 import { createPost } from '@store/posts';
+import { getUserId } from '@store/user/selectors';
 
 import Input, { InputField } from '@components/Input';
 import Button from '@components/Button';
@@ -78,6 +79,7 @@ const NewPostPage = ({ className }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [content, setContent] = useState('');
+  const authorId = useSelector(getUserId);
 
 
   const handleDescriptionChange = ({ target }) => {
@@ -90,7 +92,7 @@ const NewPostPage = ({ className }) => {
 
   
   const handleAddNewPost = () => {
-    dispatch(createPost({ title, description, content }));
+    dispatch(createPost({ title, description, content, authorId }));
   }
 
   return (

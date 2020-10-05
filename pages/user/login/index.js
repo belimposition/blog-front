@@ -6,7 +6,7 @@ import BaseLayout from '@components/layouts/BaseLayout';
 import Header from '@components/Header';
 
 
-const MainPage = () => (
+const LoginPage = () => (
   <Fragment>
     <Head>
       <title>Pet blog login</title>
@@ -25,10 +25,10 @@ const MainPage = () => (
   </Fragment>
 );
 
-MainPage.getInitialProps = async (ctx) => {
+LoginPage.getInitialProps = async (ctx) => {
   // await Promise.all([someSaga]);
   return {};
 };
 
-export default MainPage;
+export default LoginPage;
 

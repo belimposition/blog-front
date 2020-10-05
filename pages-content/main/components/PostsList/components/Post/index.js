@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Router from 'next/router';
 
 import { deletePostById } from '@store/posts';
+import { getIsAuth, getUserId } from '@store/user/selectors';
 
 import Link from '@components/Link';
 import Button from '@components/Button';
@@ -105,6 +106,9 @@ const Post = ({
   post,
 }) => {
   const dispatch = useDispatch();
+  const isAuthUser = useSelector(getIsAuth);
+  const userId = useSelector(getUserId);
+  const isShowControls = isAuthUser && userId === post.authorId;
 
   const onUpdateHandler = () => {
     const routeTo = '/update-post/[id]';
@@ -123,10 +127,10 @@ const Post = ({
       <Footer>
         <View>{post.view}</View>
         <PostDate>{post.postDate}</PostDate>
-        <Controls>
+        {isShowControls && <Controls>
           <ControlBtn onClick={onUpdateHandler}><StyledEditSvg /></ControlBtn>
           <ControlBtn onClick={onRemoveHandler}><StyledRemoveSvg /></ControlBtn>
-        </Controls>
+        </Controls>}
       </Footer>
     </PostWrapper>
   );

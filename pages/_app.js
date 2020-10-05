@@ -3,18 +3,23 @@
 import App from 'next/app';
 import React, { Fragment } from 'react';
 import Head from 'next/head';
+import Cookies from 'universal-cookie';
 
 import { wrapper } from '@store';
 import GlobalStyles from '@styles/global';
 
+
+import { authUserSaga } from '@store/user/saga';
 import { getPostsSaga } from '@store/posts/saga';
 
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
-
     if (typeof window === 'undefined') {
+      const cookie = new Cookies(ctx.req.headers.cookie);
+      const token = cookie.get('authToken');
       await Promise.all([
+        ctx.store.runSaga(authUserSaga, token).toPromise(),
         ctx.store.runSaga(getPostsSaga).toPromise(),
       ]);
     }

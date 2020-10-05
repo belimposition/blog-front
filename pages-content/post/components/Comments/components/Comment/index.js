@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { deleteCommentById, setChangeComment } from '@store/posts';
+import { getUserId } from '@store/user/selectors'
 
 const AVATAR_DEFAULT = '../../../static/images/avatar.jpg';
 
@@ -18,7 +19,7 @@ const Avatar = styled.img`
   height: 35px;
 `;
 
-const Comment = styled.div`
+const CommentBox = styled.div`
   display: flex;
   flex-direction: column;
 `;
@@ -86,41 +87,44 @@ const RemoveComment = styled.button`
 
 
 
-const Comments = ({
+const Comment = ({
  className,
  comment,
  postId,
 }) => {
   const dispatch = useDispatch();
+  const userId = useSelector(getUserId);
+  const isShowControls = comment.authorId === userId;
 
   const onRemoveCommentHandler = (commentId) => () => {
     dispatch(deleteCommentById({
       postId,
+      authorId: userId,
       commentId,
     }));
   }
 
   const onChangeCommentHandler = () => {
-    dispatch(setChangeComment(comment));
+    dispatch(setChangeComment(comment, userId));
   };
 
   return (
     <CommentWrapper className={className}>
       <Avatar src={comment.avatar || AVATAR_DEFAULT} />
-      <Comment>
+      <CommentBox>
         <Header>
           <UserName>{comment.userName}</UserName>
           <CreateDate>Создан: {comment.createDate}</CreateDate>
           {comment.changeDate && <ChangeDate>Изменён: {comment.changeDate}</ChangeDate>}
         </Header>
         <Message>{comment.message}</Message>
-        <Controls>
+        {isShowControls && <Controls>
           <ChangeComment onClick={onChangeCommentHandler}>Редактировать</ChangeComment>
           <RemoveComment onClick={onRemoveCommentHandler(comment._id)}>Удалить</RemoveComment>
-        </Controls>
-      </Comment>
+        </Controls>}
+      </CommentBox>
     </CommentWrapper>
   );
 };
 
-export default Comments;
+export default Comment;

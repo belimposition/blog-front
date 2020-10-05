@@ -3,31 +3,9 @@ import styled from 'styled-components/macro';
 import { useSelector } from 'react-redux';
 
 import { getPostById } from '@store/posts/selectors';
+import { getIsAuth } from '@store/user/selectors';
 
 import Comments from './components/Comments';
-
-const MOCK_COMMENTS = [
-  {
-    _id: 123,
-    userName: 'Oleg Redko',
-    userId: 'asdasd123123',
-    avatar: null,
-    // комментарий можно изменить в течении xxx минут, после добавления
-    // комменарий можно удалить в течении xxx минут,
-    createDate: String(new Date()),
-    changeDate: null,
-    message: 'Какой-то комментарий',
-  },
-  {
-    _id: 1234,
-    userName: 'PbIshechka',
-    userId: 'asdasd123123',
-    avatar: null,
-    createDate: String(new Date()),
-    changeDate: null,
-    message: 'Какой-то комментарий',
-  }
-];
 
 const PostPageWrapper = styled.div`
   padding-top: 40px;
@@ -56,13 +34,14 @@ const StyledComments = styled(Comments)``;
 
 const PostPageContent = ({ className, id }) => {
   const post = useSelector(getPostById(id));
+  const isAuth = useSelector(getIsAuth);
   // post.comments = MOCK_COMMENTS;
 
   return (
     <PostPageWrapper className={className}>
       <StyledTitle>{post.title}</StyledTitle>
       <StyledPostContent dangerouslySetInnerHTML={{ __html: post.content }} />
-      <StyledComments comments={post.comments} postId={id} />
+      {isAuth && <StyledComments comments={post.comments} postId={id} />}
     </PostPageWrapper>
   );
 }

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { sendNewComment, changeComment, setChangeComment } from '@store/posts';
 import { getChangeComment } from '@store/posts/selectors';
+import { getUserId, getUserName } from '@store/user/selectors'
 
 
 import Button from '@components/Button';
@@ -41,6 +42,8 @@ const NewComment = ({
 }) => {
   const dispatch = useDispatch();
   const changingComment = useSelector(getChangeComment);
+  const authorId = useSelector(getUserId);
+  const userName = useSelector(getUserName);
   const [newComment, setNewComment] = useState('');
 
   useEffect(() => {
@@ -56,13 +59,10 @@ const NewComment = ({
   }, [newComment]);
 
   const sendCommentHandler = () => {
-    const userName = 'Oleg Redko';
-    const userId = '12312313';
-
     dispatch(sendNewComment({
       postId,
+      authorId,
       userName,
-      userId,
       message: newComment,
     }));
 
@@ -70,8 +70,10 @@ const NewComment = ({
   }
 
   const changeCommentHandler = () => {
+
     dispatch(changeComment({
       postId,
+      authorId,
       comment: {
         ...changingComment,
         message: newComment,

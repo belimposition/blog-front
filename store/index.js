@@ -35,11 +35,14 @@ export const makeStore = (initialState = {}, options = {}) => {
   const sagaMiddleware = createSagaMiddleware({
     context: {
       res: options.res,
+      req: options.req,
       ctx: options,
       axios: axios.create({
         baseURL: 'http://localhost:8000',
+        withCredentials: true,
         headers: {
           'Content-Type': 'application/json',
+          'Access-Control-Allow-Credentials': true,
           'Access-Control-Allow-Origin': 'http://localhost:8000',
         },
       }),
